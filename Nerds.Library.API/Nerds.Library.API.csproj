@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>Nerds.Library</RootNamespace>
     <StartupObject>Nerds.Library.Program</StartupObject>
     <Authors>Wanno Drijfhout</Authors>
     <Company>Nerds &amp; co</Company>
     <Description>A library API for nerds</Description>
   </PropertyGroup>
 
-    <PropertyGroup>
+  <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
@@ -16,6 +17,13 @@
   <PropertyGroup>
     <CodeAnalysisRuleSet>../NerdsCodeAnalysisRuleSet.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Remove="Books\**" />
+    <Content Remove="Books\**" />
+    <EmbeddedResource Remove="Books\**" />
+    <None Remove="Books\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
@@ -26,6 +34,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nerds.Library.Domain\Nerds.Library.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ namespace Nerds.Library.Books
     /// <summary>
     /// A template for <see cref="Book"/>.
     /// </summary>
-    internal sealed class BookTemplate
+    public sealed class BookTemplate
     {
         /// <summary>
         /// The globally unique identifier of this instance.

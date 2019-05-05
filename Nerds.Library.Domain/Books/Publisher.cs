@@ -3,9 +3,9 @@
 namespace Nerds.Library.Books
 {
     /// <summary>
-    /// A single instance of a book. Every instance is at one physical location at a time.
+    /// A publisher of books.
     /// </summary>
-    internal sealed class Book
+    public sealed class Publisher
     {
         /// <summary>
         /// The globally unique identifier of this instance.
@@ -13,8 +13,8 @@ namespace Nerds.Library.Books
         public Guid Id { get; set; }
 
         /// <summary>
-        /// The unique barcode to distinguish instances of the same book. Can be same as <see cref="Id"/>.
+        /// The name of the publisher.
         /// </summary>
-        public string UniqueBarcode { get; set; }
+        public string Name { get; set; }
     }
 }

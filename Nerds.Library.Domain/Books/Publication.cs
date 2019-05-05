@@ -5,7 +5,7 @@ namespace Nerds.Library.Books
     /// <summary>
     /// The publication metadata of a book.
     /// </summary>
-    internal sealed class Publication
+    public sealed class Publication
     {
         /// <summary>
         /// The moment of publication.

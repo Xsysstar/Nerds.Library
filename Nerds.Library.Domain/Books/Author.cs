@@ -2,7 +2,7 @@
 
 namespace Nerds.Library.Books
 {
-    internal sealed class Author
+    public sealed class Author
     {
         /// <summary>
         /// The globally unique identifier of this instance.

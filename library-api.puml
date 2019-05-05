@@ -1,76 +1,91 @@
 @startuml
 
-class Library {
-}
-Library o- Book : Owns
-
-class Book {
-	#ID
-	+UniqueBarcode
-}
-Book -> BookTemplate
-Book o-- Reservation
-
-class BookTemplate {
-	#ID
-}
-BookTemplate o--> Rating
-BookTemplate o--> Author
-BookTemplate o--> Publication
-BookTemplate o--> Genre
-BookTemplate o--> Title
-
-class Rating {
-	+Stars
-	+Origin : Customer
-}
-
-class Author {
-	#ID
-	+Name
-	+DayOfBirth
-	+DayOfDeath
-}
-
-class Publication {
-	+ISBN10
-	+ISBN13
-	+PublicationDate
-}
-Publication o--> Publisher
-
-class Publisher {
-	#ID
+class Organization {
 	+Name
 }
+Organization *-- Books.Book
+Business.BookBusiness --* Organization
 
-class Genre {
-	#ID
-	+Caption
+package Books
+{
+	class Book {
+		#ID
+		+UniqueBarcode
+	}
+	Book -> BookTemplate
+
+	class BookTemplate {
+		#ID
+	}
+	BookTemplate --> Publication
+	BookTemplate --> Title
+	BookTemplate o--> Author
+	BookTemplate o--> Genre
+
+
+	class Author {
+		#ID
+		+Name
+		+DayOfBirth
+		+DayOfDeath
+	}
+
+	class Publication {
+		+ISBN10
+		+ISBN13
+		+PublicationDate
+	}
+	Publication --> Publisher
+
+	class Publisher {
+		#ID
+		+Name
+	}
+
+	class Genre {
+		#ID
+		+Caption
+	}
+
+	class Title {
+		#ID
+		+Caption
+		+Subcaption
+	}
 }
+package Business 
+{
+	class BookBusiness {
+		+TryGetAvailableBook(Customer,DateTime) : Book
+		+Reserve(Book,Customer) : Reservation
+		+Return(Book,Customer) : Reservation
+	}
+	BookBusiness o--> Reservation
+	BookBusiness o--> Review
 
-class Title {
-	#ID
-	+Caption
-	+Subcaption
+	Books.Book "*" <-o BookBusiness
+	Books.BookTemplate "1" <- BookBusiness
+
+	class Reservation {
+		+BeginDateTime
+		+EndDateTime
+		+IsBookAvailable
+	}
+	Reservation --> Customer
+
+	class Customer {
+		#ID
+		+Name
+		+EmailAddress
+	}
+
+	class Review {
+		#ID
+		+Stars
+		+Text
+	}
+	Review --> Customer
+
 }
-
-class Reservation {
-	{static} +IsBookAvailable(Book,DateTime) : bool
-	{static} +Reserve(Book,Customer) : Reservation
-	{static} +Return(Book,Customer) : Reservation
-	+BeginDateTime
-	+EndDateTime
-	+IsBookAvailable
-}
-
-Reservation --> Customer
-
-class Customer {
-	#ID
-	+Name
-	+EmailAddress
-}
-
 
 @enduml

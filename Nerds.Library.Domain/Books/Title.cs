@@ -3,7 +3,7 @@
     /// <summary>
     /// The title metadata of a book
     /// </summary>
-    internal sealed class Title
+    public sealed class Title
     {
         /// <summary>
         /// The main caption.

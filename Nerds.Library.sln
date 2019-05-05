@@ -3,16 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nerds.Library", "Nerds.Library\Nerds.Library.csproj", "{4582904F-3804-4720-8D4B-BD010E1CEB61}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2EEB7183-416C-4FB5-AD59-6F386EF8E380}"
 	ProjectSection(SolutionItems) = preProject
 		library-api.pdf = library-api.pdf
 		library-api.png = library-api.png
 		library-api.puml = library-api.puml
-		README.md = README.md
 		NerdsCodeAnalysisRuleSet.ruleset = NerdsCodeAnalysisRuleSet.ruleset
+		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nerds.Library.Domain", "Nerds.Library.Domain\Nerds.Library.Domain.csproj", "{0346033F-7208-489A-A9CF-7F5BFEB13233}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nerds.Library.API", "Nerds.Library.API\Nerds.Library.API.csproj", "{D72C37FF-8547-46B1-94BD-BBE60813F628}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +22,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4582904F-3804-4720-8D4B-BD010E1CEB61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4582904F-3804-4720-8D4B-BD010E1CEB61}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4582904F-3804-4720-8D4B-BD010E1CEB61}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4582904F-3804-4720-8D4B-BD010E1CEB61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0346033F-7208-489A-A9CF-7F5BFEB13233}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0346033F-7208-489A-A9CF-7F5BFEB13233}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0346033F-7208-489A-A9CF-7F5BFEB13233}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0346033F-7208-489A-A9CF-7F5BFEB13233}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D72C37FF-8547-46B1-94BD-BBE60813F628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D72C37FF-8547-46B1-94BD-BBE60813F628}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D72C37FF-8547-46B1-94BD-BBE60813F628}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D72C37FF-8547-46B1-94BD-BBE60813F628}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

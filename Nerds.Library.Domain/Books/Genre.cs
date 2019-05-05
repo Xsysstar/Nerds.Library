@@ -5,7 +5,7 @@ namespace Nerds.Library.Books
     /// <summary>
     /// The genre of a book.
     /// </summary>
-    internal sealed class Genre
+    public sealed class Genre
     {
         /// <summary>
         /// The globally unique identifier of this instance.
