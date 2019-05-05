@@ -95,6 +95,11 @@ I introduced a class `BookBusiness` (one per `BookTemplate`) to manage the busin
 
 ## Implementation
 
+### OData
+
+I tried to simply apply the [OData](https://docs.microsoft.com/en-us/aspnet/web-api/overview/odata-support-in-aspnet-web-api/supporting-odata-query-options) support in ASP.NET to publish a standardized API with support for filtering, ordering etc. It's [a bit more involved](https://devblogs.microsoft.com/odata/asp-net-core-odata-now-available/) that I expected, so I discarded the approach for now, merely taking some inspiration from it.
+
 ### Further improvements
 
 - Implement pagination in the API.
+- Do not reuse domain classes in API layer.
