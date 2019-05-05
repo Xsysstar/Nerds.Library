@@ -62,16 +62,25 @@ package Business
 	}
 	BookBusiness o--> Reservation
 	BookBusiness o--> Review
+	BookBusiness o--> Availability
 
 	Books.Book "*" <-o BookBusiness
 	Books.BookTemplate "1" <- BookBusiness
 
 	class Reservation {
-		+BeginDateTime
-		+EndDateTime
-		+IsBookAvailable
+		+BeginTerm
+		+EndTerm
+		+IsBookTaken
+		+IsBookReturned
 	}
 	Reservation --> Customer
+	Books.Book <.. Reservation
+
+	class Availability {
+		+BookId
+		+UniqueBarcode
+		+IsAvailable
+	}
 
 	class Customer {
 		#ID

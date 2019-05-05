@@ -1,6 +1,7 @@
 ﻿using Nerds.Library.Books;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 
@@ -13,17 +14,22 @@ namespace Nerds.Library.Business
     {
         private readonly Organization organization;
 
-        public BookBusiness(Organization organization, BookTemplate bookTemplate)
+        private readonly ICollection<Reservation> reservations;
+
+        public BookBusiness(BookTemplate bookTemplate, Organization organization, ICollection<Reservation> reservations = null)
         {
-            Debug.Assert(organization != null, "organization != null");
             Debug.Assert(bookTemplate != null, "bookTemplate != null");
-            this.organization = organization;
+            Debug.Assert(organization != null, "organization != null");
             BookTemplate = bookTemplate;
+            this.organization = organization;
+            this.reservations = reservations ?? new Collection<Reservation>();
         }
 
         public BookTemplate BookTemplate { get; private set; }
 
-        private IQueryable<Book> Books => organization.OwnedBooks.Where(b => b.Template == BookTemplate);
+        public IQueryable<Book> Books => organization.OwnedBooks.Where(b => b.Template == BookTemplate);
+
+        public IQueryable<Reservation> Reservations => reservations.AsQueryable();
 
         /// <summary>
         /// Tries to get an instance of <see cref="BookTemplate"/> that should be available on
@@ -32,10 +38,18 @@ namespace Nerds.Library.Business
         /// <param name="availableOn">The moment the book should be available.</param>
         /// <param name="customer">The customer, in case he has existing reservations.</param>
         /// <returns>The list of every available <see cref="Book"/>.</returns>
-        public IEnumerable<Book> GetAvailableBooks(DateTimeOffset availableOn, Customer customer = null)
+        public IEnumerable<Availability> GetBookAvailability(DateTimeOffset availableOn, Customer customer = null)
         {
-            // TODO: filter by availability and customer
-            return Books;
+            var conflictingReservations = Reservations.Where(r => r.BeginTerm < availableOn && availableOn < r.EndTerm && r.Customer != customer && !r.IsBookReturned);
+            var unavailableBookIds = conflictingReservations.Select(r => r.BookId);
+
+            var availabilities = Books.Select(b => new Availability
+            {
+                BookId = b.Id,
+                UniqueBarcode = b.UniqueBarcode,
+                IsAvailable = !unavailableBookIds.Contains(b.Id)
+            });
+            return availabilities;
         }
 
         /// <summary>

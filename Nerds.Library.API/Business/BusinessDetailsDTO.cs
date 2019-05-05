@@ -15,7 +15,7 @@ namespace Nerds.Library.Business
         public IEnumerable<string> Authors { get; set; }
         public IEnumerable<string> Genres { get; set; }
 
-        public IEnumerable<string> CurrentlyAvailableBooksByBarcode { get; set; }
+        public IEnumerable<AvailabilityDetailsDTO> Availability { get; set; }
 
         static internal BusinessDetailsDTO FromBook(BookBusiness business)
         {
@@ -34,7 +34,7 @@ namespace Nerds.Library.Business
                 Title = business.BookTemplate.Title?.Caption,
                 Authors = business.BookTemplate.Authors?.Select(a => a.FullName)?.ToArray(),
                 Genres = business.BookTemplate.Genres?.Select(a => a.Caption)?.ToArray(),
-                CurrentlyAvailableBooksByBarcode = business.GetAvailableBooks(availabilityCheckMoment).Select(b => b.UniqueBarcode)
+                Availability = business.GetBookAvailability(availabilityCheckMoment).Select(AvailabilityDetailsDTO.FromAvailability)
             };
         }
     }

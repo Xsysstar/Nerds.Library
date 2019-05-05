@@ -14,7 +14,7 @@ namespace Nerds.Library
         private readonly ICollection<Book> ownedBooks;
         private readonly ICollection<BookBusiness> bookBusinesses;
 
-        public Organization(ICollection<Book> ownedBooks, ICollection<BookBusiness> bookBusinesses)
+        public Organization(ICollection<Book> ownedBooks = null, ICollection<BookBusiness> bookBusinesses = null)
         {
             this.ownedBooks = ownedBooks ?? new HashSet<Book>();
             this.bookBusinesses = bookBusinesses ?? new HashSet<BookBusiness>();
@@ -45,7 +45,7 @@ namespace Nerds.Library
             var business = bookBusinesses.FirstOrDefault(b => b.BookTemplate == book.Template);
             if (business == null)
             {
-                business = new BookBusiness(this, book.Template);
+                business = new BookBusiness(book.Template, this);
                 bookBusinesses.Add(business);
             }
         }
