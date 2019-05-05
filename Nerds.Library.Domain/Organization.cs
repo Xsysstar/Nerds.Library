@@ -1,5 +1,5 @@
 ﻿using Nerds.Library.Books;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace Nerds.Library
 {
@@ -11,7 +11,7 @@ namespace Nerds.Library
         /// <summary>
         /// The collection of owned books.
         /// </summary>
-        public IQueryable<Book> OwnedBooks { get; set; }
+        public ICollection<Book> OwnedBooks { get; set; }
 
         // TODO:
         /////// <summary>

@@ -69,7 +69,7 @@ A single 'book type' is also hard, given that (effectively) the same book could 
 
 ### ISBN
 
-ISBN exists in two formats: ISBN-10 or ISBN-13. The same books can have codes in both. I have not investigated whether there's a conversion between them, so I'm modeling both for now.
+ISBN exists in two formats: ISBN-10 or ISBN-13. The same books can have codes in both. I'll presume we can convert everything to the more modern ISBN-13 and we can forget about ISBN-10.
 
 The same book in different languages or different forms (hardcover, softcover) will have different ISBNs, even though they are interchangeable for many purposes.
 
@@ -92,3 +92,9 @@ The origin of ratings remains unspecified. I assume customers might submit a rat
 ### BookBusiness
 
 I introduced a class `BookBusiness` (one per `BookTemplate`) to manage the business-related and customer-oriented aspects around books. In particular `Reservation`s and `Review`s would have no reason for existing without `Customer`s, so I put them in a separate package.
+
+## Implementation
+
+### Further improvements
+
+- Implement pagination in the API.

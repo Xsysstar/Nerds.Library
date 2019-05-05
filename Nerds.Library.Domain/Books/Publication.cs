@@ -10,7 +10,7 @@ namespace Nerds.Library.Books
         /// <summary>
         /// The moment of publication.
         /// </summary>
-        public DateTime PublicationDate { get; set; }
+        public DateTimeOffset PublicationDate { get; set; }
 
         /// <summary>
         /// The publisher performing this
@@ -18,14 +18,10 @@ namespace Nerds.Library.Books
         public Publisher Publisher { get; set; }
 
         /// <summary>
-        /// The ISBN-10 (legacy).
+        /// The ISBN-13.
         /// </summary>
-        public string ISBN10 { get; set; }
-
-        /// <summary>
-        /// The ISBN-13 (modern).
-        /// </summary>
-        public string ISBN13 { get; set; }
+        /// <example>978-3-16-148410-0</example>
+        public string ISBN { get; set; }
 
         // One could imagine more publication-related properties, like:
         // -- public string Edition { get; set; }

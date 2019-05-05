@@ -17,13 +17,6 @@
   <PropertyGroup>
     <CodeAnalysisRuleSet>../NerdsCodeAnalysisRuleSet.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <Compile Remove="Books\**" />
-    <Content Remove="Books\**" />
-    <EmbeddedResource Remove="Books\**" />
-    <None Remove="Books\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\" />

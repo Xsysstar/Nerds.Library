@@ -16,5 +16,10 @@ namespace Nerds.Library.Books
         /// The unique barcode to distinguish instances of the same book. Can be same as <see cref="Id"/>.
         /// </summary>
         public string UniqueBarcode { get; set; }
+
+        /// <summary>
+        /// The template of the same book.
+        /// </summary>
+        public BookTemplate Template { get; set; }
     }
 }

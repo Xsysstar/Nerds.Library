@@ -10,43 +10,22 @@ namespace Nerds.Library.Books
     [ApiController]
     public class BooksController : ControllerBase
     {
+        private readonly Organization organization;
+
+        public BooksController(Organization organization)
+        {
+            this.organization = organization;
+        }
+
         /// <summary>
         /// Gets the list of all available books in this library
         /// </summary>
         /// <remarks>Requirement 1.</remarks>
-        /// <returns>The value</returns>
-        // GET api/values
+        /// <returns>The owned books.</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<Book>> Get()
         {
-            return new string[] { "value1", "value2" };
-        }
-
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+            return new ActionResult<IEnumerable<Book>>(organization.OwnedBooks);
         }
     }
 }
