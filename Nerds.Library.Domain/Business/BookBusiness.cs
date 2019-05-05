@@ -42,8 +42,7 @@ namespace Nerds.Library.Business
             var applicableReservations = Reservations.Where(r => r.BeginTerm <= availableOn && availableOn <= r.EndTerm && !r.IsBookReturned);
             var availabilities = Books.Select(b => new Availability
             {
-                BookId = b.Id,
-                UniqueBarcode = b.UniqueBarcode,
+                Book = b,
                 Reservation = applicableReservations.FirstOrDefault(r => r.BookId == b.Id)
             });
 
@@ -67,7 +66,7 @@ namespace Nerds.Library.Business
             var reservationMoment = DateTimeOffset.Now;
 
             var availabilities = GetBookAvailabilities(reservationMoment);
-            var conflictingReservation = availabilities.FirstOrDefault(a => a.BookId == book.Id && a.Reservation != null)?.Reservation;
+            var conflictingReservation = availabilities.FirstOrDefault(a => a.Book == book && a.Reservation != null)?.Reservation;
             if (conflictingReservation != null && conflictingReservation.Customer != customer)
             {
                 throw new InvalidOperationException("This book is not available for this customer");
@@ -84,7 +83,7 @@ namespace Nerds.Library.Business
             };
             reservations.Add(reservation);
 
-            Debug.Assert(GetBookAvailabilities(reservationMoment).Any(a => a.BookId == book.Id && a.Reservation == reservation),
+            Debug.Assert(GetBookAvailabilities(reservationMoment).Any(a => a.Book == book && a.Reservation == reservation),
                 "GetBookAvailability(reservationMoment).Any(a => a.BookId == book.Id && a.Reservation == reservation)");
 
             return reservation;
@@ -93,7 +92,7 @@ namespace Nerds.Library.Business
         public void TakeBook(Book book, Customer customer)
         {
             var takingMoment = DateTimeOffset.Now;
-            var availability = GetBookAvailabilities(takingMoment).FirstOrDefault(a => a.BookId == book.Id);
+            var availability = GetBookAvailabilities(takingMoment).FirstOrDefault(a => a.Book == book);
 
             var reservation = availability.Reservation;
             if (reservation == null)
@@ -118,7 +117,7 @@ namespace Nerds.Library.Business
         public void ReturnBook(Book book, Customer customer = null)
         {
             var returningMoment = DateTimeOffset.Now;
-            var availability = GetBookAvailabilities(returningMoment).FirstOrDefault(a => a.BookId == book.Id);
+            var availability = GetBookAvailabilities(returningMoment).FirstOrDefault(a => a.Book == book);
 
             var reservation = availability.Reservation;
             if (reservation == null)
@@ -133,7 +132,7 @@ namespace Nerds.Library.Business
 
             reservation.IsBookReturned = true;
 
-            Debug.Assert(GetBookAvailabilities(returningMoment).Any(a => a.BookId == book.Id && a.Reservation == null),
+            Debug.Assert(GetBookAvailabilities(returningMoment).Any(a => a.Book == book && a.Reservation == null),
                 "GetBookAvailability(reservationMoment).Any(a => a.BookId == book.Id && a.Reservation == null)");
         }
 

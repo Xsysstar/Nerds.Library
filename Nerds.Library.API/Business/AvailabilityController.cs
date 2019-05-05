@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 
@@ -11,28 +12,35 @@ namespace Nerds.Library.Business
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class ReservationController : ControllerBase
+    public class AvailabilityController : ControllerBase
     {
         private readonly Organization organization;
 
-        public ReservationController(Organization organization)
+        public AvailabilityController(Organization organization)
         {
             this.organization = organization;
         }
 
         /// <summary>
-        /// Gets the list of all available books in this library, grouped by template/business.
+        /// Gets all availability information per book in this library.
         /// </summary>
         /// <remarks>Satisfies requirement 1; interpreting 'available' as 'not reserved'.</remarks>
-        /// <returns>The owned books.</returns>
+        /// <returns>The availability information on the books.</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<BusinessDetailsDTO>> GetAll()
+        public ActionResult<IEnumerable<AvailabilityDetailsDTO>> GetAll()
         {
-            return Ok(organization.BookBusinesses.Select(BusinessDetailsDTO.FromBook));
+            return Ok(organization.BookBusinesses.SelectMany(b => b.GetBookAvailabilities(DateTimeOffset.UtcNow)).Select(AvailabilityDetailsDTO.FromAvailability));
         }
 
-        [HttpPost("{uniqueBarcode}")]
-        public ActionResult<Reservation> ReserveBook(string uniqueBarcode, Guid customerId)
+        /// <summary>
+        /// Reserves the book instance with the specified barcode for the customer.
+        /// </summary>
+        /// <remarks>Satisfies requirement 3.</remarks>
+        /// <param name="uniqueBarcode">The unique barcode on the book.</param>
+        /// <param name="customerId">The customer id.</param>
+        /// <returns>The <see cref="AvailabilityDetailsDTO"/>.</returns>
+        [HttpPost("reserve/{uniqueBarcode}")]
+        public ActionResult<AvailabilityDetailsDTO> ReserveBook(string uniqueBarcode, [Required] Guid customerId)
         {
             // Find the book template
             var book = organization.OwnedBooks.FirstOrDefault(b => string.Equals(b.UniqueBarcode, uniqueBarcode, StringComparison.OrdinalIgnoreCase));
@@ -54,12 +62,11 @@ namespace Nerds.Library.Business
 
             var reservation = business.ReserveBook(book, customer);
 
-            // TODO: transform to DTO
-            return reservation;
+            var availability = new Availability { Book = book, Reservation = reservation };
+            return AvailabilityDetailsDTO.FromAvailability(availability);
         }
 
         // TODO:
-        // - Get reservable available books (req 1)
         // - Get reservations for customer (that are expiring soon) (req 4)
         // - Reserve book (req 3)
         // - Return book (req 5, req 9)

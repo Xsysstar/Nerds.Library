@@ -1,8 +1,10 @@
-﻿namespace Nerds.Library.Business
+﻿using Nerds.Library.Books;
+
+namespace Nerds.Library.Business
 {
     public class AvailabilityDetailsDTO
     {
-        public string UniqueBarcode { get; set; }
+        public BookDetailsDTO BookDetails { get; set; }
 
         public bool IsAvailable { get; set; }
 
@@ -10,7 +12,7 @@
         {
             return new AvailabilityDetailsDTO
             {
-                UniqueBarcode = availabilty.UniqueBarcode,
+                BookDetails = BookDetailsDTO.FromBook(availabilty.Book),
                 IsAvailable = availabilty.Reservation == null,
             };
         }
