@@ -37,8 +37,8 @@ I intend to develop this assignment as follows:
 - Model the domain
 - Configure project
   - Set-up metadata
-  - Enable static analyzers
-  - Install Swagger tools
+  - Enable static analyzers ([FxCop](https://www.nuget.org/packages/Microsoft.CodeAnalysis.FxCopAnalyzers))
+  - Install Swagger tools ([SwashBuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.2&tabs=visual-studio)
 - Implement domain.
 - Model and implement the API for the domain queries (details, lists, sorting, filtering)
 - Model and implement the API for the domain commands/mutations (reservations, returns, rating)
