@@ -1,6 +1,7 @@
 ﻿using Nerds.Library.Books;
 using Nerds.Library.Business;
 using System;
+using System.Globalization;
 using System.Linq;
 
 namespace Nerds.Library
@@ -45,7 +46,7 @@ namespace Nerds.Library
             return new Book
             {
                 Id = id,
-                UniqueBarcode = id.ToString(),
+                UniqueBarcode = id.ToString("N", CultureInfo.InvariantCulture).Substring(0, 13),
                 Template = FakeBookTemplate()
             };
         }
@@ -57,8 +58,8 @@ namespace Nerds.Library
                 Id = Guid.NewGuid(),
                 Publication = FakePublication(),
                 Title = FakeTitle(),
-                Authors = Enumerable.Range(1, random.Next(1, 4)).Select(_ => FakeAuthor()).AsQueryable(),
-                Genres = Enumerable.Range(1, random.Next(1, 3)).Select(_ => FakeGenre()).AsQueryable(),
+                Authors = Enumerable.Range(1, random.Next(1, 4)).Select(_ => FakeAuthor()).Distinct().AsQueryable(),
+                Genres = Enumerable.Range(1, random.Next(1, 3)).Select(_ => FakeGenre()).Distinct().AsQueryable(),
             };
         }
 
@@ -93,7 +94,7 @@ namespace Nerds.Library
             return fakeGenres[random.Next(fakeGenres.Length)];
         }
 
-        private Customer FakeCustomer()
+        public Customer FakeCustomer()
         {
             var id = Guid.NewGuid();
             return new Customer
