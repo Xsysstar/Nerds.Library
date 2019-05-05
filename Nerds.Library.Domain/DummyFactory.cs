@@ -1,6 +1,5 @@
 ﻿using Nerds.Library.Books;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Nerds.Library
@@ -29,11 +28,11 @@ namespace Nerds.Library
 
         public Organization FakeOrganization()
         {
-            var ownedBooks = new HashSet<Book>();
+            var organization = new Organization(null, null);
             for (var i = 0; i <= random.Next(6, 24); i++)
-                ownedBooks.Add(FakeBook());
+                organization.AddBook(FakeBook());
 
-            return new Organization { OwnedBooks = ownedBooks };
+            return organization;
         }
 
         public Book FakeBook()

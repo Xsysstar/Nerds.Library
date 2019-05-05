@@ -102,4 +102,5 @@ I tried to simply apply the [OData](https://docs.microsoft.com/en-us/aspnet/web-
 ### Further improvements
 
 - Implement pagination in the API.
-- Do not reuse domain classes in API layer.
+- Implement Equals, GetHashCode, ToString (e.g., using [Fody](https://github.com/Fody/Fody))
+- (If still there) Do not reuse domain classes in API layer.

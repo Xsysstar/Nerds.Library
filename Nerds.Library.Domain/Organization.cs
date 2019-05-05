@@ -1,5 +1,8 @@
 ﻿using Nerds.Library.Books;
+using Nerds.Library.Business;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Nerds.Library
 {
@@ -8,15 +11,43 @@ namespace Nerds.Library
     /// </summary>
     public sealed class Organization
     {
-        /// <summary>
-        /// The collection of owned books.
-        /// </summary>
-        public ICollection<Book> OwnedBooks { get; set; }
+        private readonly ICollection<Book> ownedBooks;
+        private readonly ICollection<BookBusiness> bookBusinesses;
 
-        // TODO:
-        /////// <summary>
-        /////// The book businesses.
-        /////// </summary>
-        ////public IQueryable<BookBusiness> BookBusinesses { get; set; }
+        public Organization(ICollection<Book> ownedBooks, ICollection<BookBusiness> bookBusinesses)
+        {
+            this.ownedBooks = ownedBooks ?? new HashSet<Book>();
+            this.bookBusinesses = bookBusinesses ?? new HashSet<BookBusiness>();
+        }
+
+        /// <summary>
+        /// The collection of every <see cref="Book"/>.
+        /// </summary>
+        public IQueryable<Book> OwnedBooks => ownedBooks.AsQueryable();
+
+        /// <summary>
+        /// The book businesses, one per <see cref="BookTemplate"/>.
+        /// </summary>
+        public IQueryable<BookBusiness> BookBusinesses => bookBusinesses.AsQueryable();
+
+        /// <summary>
+        /// Adds a new book to the organization.
+        /// </summary>
+        /// <param name="book"></param>
+        public void AddBook(Book book)
+        {
+            if (ownedBooks.Contains(book))
+            {
+                throw new InvalidOperationException("Book already contained");
+            }
+
+            ownedBooks.Add(book);
+            var business = bookBusinesses.FirstOrDefault(b => b.BookTemplate == book.Template);
+            if (business == null)
+            {
+                business = new BookBusiness(this, book.Template);
+                bookBusinesses.Add(business);
+            }
+        }
     }
 }
