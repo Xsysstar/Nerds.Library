@@ -13,13 +13,10 @@ Book o-- Reservation
 
 class BookTemplate {
 	#ID
-	+ISBN10
-	+ISBN13
-	+PublicationDate
 }
 BookTemplate o--> Rating
 BookTemplate o--> Author
-BookTemplate o--> Publisher
+BookTemplate o--> Publication
 BookTemplate o--> Genre
 BookTemplate o--> Title
 
@@ -34,6 +31,13 @@ class Author {
 	+DayOfBirth
 	+DayOfDeath
 }
+
+class Publication {
+	+ISBN10
+	+ISBN13
+	+PublicationDate
+}
+Publication o--> Publisher
 
 class Publisher {
 	#ID
