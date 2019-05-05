@@ -105,3 +105,169 @@ I tried to simply apply the [OData](https://docs.microsoft.com/en-us/aspnet/web-
 - Implement Equals, GetHashCode, ToString (e.g., using [Fody](https://github.com/Fody/Fody))
 - (If still there) Do not reuse domain classes in API layer.
 - Performance. This is a prototype; it naive approach to querying and finding data is not scalable.
+
+## Testing
+
+This is a test run through the software (as delivered). It illustrates:
+
+ - enumerating all/available books (requirement 1)
+ - details for a specific book (requirement 2)
+ - reserving a book (requirement 3)
+
+### GET /api/Books
+```
+[
+  {
+    "id": "2e13a0a1-5688-4b18-9c3a-020609bd4738",
+    "uniqueBarcode": "2e13a0a156884",
+    "publicationDate": "2018-11-06T21:13:11.4705772+01:00",
+    "isbn": "978-3-16-148410-9",
+    "publisher": "Springer",
+    "title": "The Art of War",
+    "authors": [
+      "J.K. Rowling",
+      "Kevlin Henney",
+      "Anonymous"
+    ],
+    "genres": [
+      "Romance"
+    ]
+  },
+  ...
+]
+```
+
+### GET /api/Books/2e13a0a156884
+```
+{
+  "id": "2e13a0a1-5688-4b18-9c3a-020609bd4738",
+  "uniqueBarcode": "2e13a0a156884",
+  "publicationDate": "2018-11-06T21:13:11.4705772+01:00",
+  "isbn": "978-3-16-148410-9",
+  "publisher": "Springer",
+  "title": "The Art of War",
+  "authors": [
+    "Kevlin Henney",
+    "Hans Kazan"
+  ],
+  "genres": [
+    "Romance"
+  ]
+}
+```
+
+
+### GET /api/Customer
+```
+[
+  {
+    "id": "cab703f8-f948-4fb1-bb8b-89b055866651",
+    "name": "Customer cab703f8-f948-4fb1-bb8b-89b055866651"
+  },
+  {
+    "id": "2e4d4ffc-76c9-4b9d-8b5a-2e8447366d30",
+    "name": "Customer 2e4d4ffc-76c9-4b9d-8b5a-2e8447366d30"
+  }
+]
+```
+
+### GET /api/Availability
+```
+[
+  {
+    "bookDetails": {
+      "id": "2e13a0a1-5688-4b18-9c3a-020609bd4738",
+      "uniqueBarcode": "2e13a0a156884",
+      "publicationDate": "2018-11-06T21:13:11.4705772+01:00",
+      "isbn": "978-3-16-148410-9",
+      "publisher": "Springer",
+      "title": "The Art of War",
+      "authors": [
+        "Kevlin Henney",
+        "J.K. Rowling"
+      ],
+      "genres": [
+        "Romance",
+        "Documentary"
+      ]
+    },
+    "isAvailable": true
+  },
+  ...
+]
+```
+Notice `"isAvailable": true`.
+
+### POST /api/Availability/reserve/2e13a0a156884?customerId=cab703f8-f948-4fb1-bb8b-89b055866651
+```
+{
+  "bookDetails": {
+    "id": "2e13a0a1-5688-4b18-9c3a-020609bd4738",
+    "uniqueBarcode": "2e13a0a156884",
+    "publicationDate": "2018-11-06T21:13:11.4705772+01:00",
+    "isbn": "978-3-16-148410-9",
+    "publisher": "Springer",
+    "title": "The Art of War",
+    "authors": [
+      "J.K. Rowling",
+      "Kevlin Henney",
+      "Tolkien"
+    ],
+    "genres": [
+      "Romance",
+      "Fake news"
+    ]
+  },
+  "isAvailable": false
+}
+```
+Notice `"isAvailable": false`.
+
+### GET /api/Availability
+```
+[
+  {
+    "bookDetails": {
+      "id": "2e13a0a1-5688-4b18-9c3a-020609bd4738",
+      "uniqueBarcode": "2e13a0a156884",
+      "publicationDate": "2018-11-06T21:13:11.4705772+01:00",
+      "isbn": "978-3-16-148410-9",
+      "publisher": "Springer",
+      "title": "The Art of War",
+      "authors": [
+        "Kevlin Henney",
+        "J.K. Rowling",
+        "Anonymous"
+      ],
+      "genres": [
+        "Drama",
+        "Action"
+      ]
+    },
+    "isAvailable": false
+  },
+  ...
+]
+```
+Notice `"isAvailable": false`.
+
+## Evaluation
+
+Small evaluation of the delivered product:
+
+- Requirements 1 through 3 are mostly implemented
+- Analysis for the other requirements and relevant domain entities is completed.
+- Automated testing is not implemented. Some (temporary) debug assertions are included, though.
+
+Some things I like in particular:
+
+- The Dummy factory
+- The domain analysis
+- Using SwashBuckle to generate Swagger-specifications from documentation and code
+- Using Static analyzers (although I barely did this time)
+
+Some things I dislike:
+
+- Non-functional requirements (like performance, scalability) were barely considered.
+- I didn't follow my original plan to first implement the all 'query' requirements.
+- My development iterations are not as 'agile' as intended; it's got hints of waterfall (although the project is small, of course).
