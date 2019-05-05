@@ -19,17 +19,18 @@ namespace Nerds.Library.Books
 
         static internal BookDetailsDTO FromBook(Book book)
         {
+            Debug.Assert(book != null, "book != null");
             Debug.Assert(book.Template != null, "book.Template != null", "Book.Id={0}", book.Id);
             return new BookDetailsDTO
             {
                 Id = book.Id,
                 UniqueBarcode = book.UniqueBarcode,
-                PublicationDate = book.Template?.Publication?.PublicationDate,
-                ISBN = book.Template?.Publication?.ISBN,
-                Publisher = book.Template?.Publication?.Publisher?.Name,
-                Title = book.Template?.Title?.Caption,
-                Authors = book.Template?.Authors?.Select(a => a.FullName)?.ToArray(),
-                Genres = book.Template?.Genres?.Select(a => a.Caption)?.ToArray()
+                PublicationDate = book.Template.Publication?.PublicationDate,
+                ISBN = book.Template.Publication?.ISBN,
+                Publisher = book.Template.Publication?.Publisher?.Name,
+                Title = book.Template.Title?.Caption,
+                Authors = book.Template.Authors?.Select(a => a.FullName)?.ToArray(),
+                Genres = book.Template.Genres?.Select(a => a.Caption)?.ToArray()
             };
         }
     }

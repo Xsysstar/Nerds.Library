@@ -28,7 +28,7 @@ namespace Nerds.Library.Books
         /// </remarks>
         /// <returns>The owned books.</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<BookDetailsDTO>> Get()
+        public ActionResult<IEnumerable<BookDetailsDTO>> GetAll()
         {
             return Ok(organization.OwnedBooks.Select(BookDetailsDTO.FromBook));
         }
@@ -53,5 +53,11 @@ namespace Nerds.Library.Books
             var result = BookDetailsDTO.FromBook(book);
             return Ok(result);
         }
+
+        // TODO:
+        // - Get by author (req 6)
+        // - Sort by rating or publication date (req 7)
+        // - Filter by publication date (req 8)
+        // - Filter by deceased authors (req 10)
     }
 }
