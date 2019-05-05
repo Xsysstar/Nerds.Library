@@ -30,7 +30,7 @@ namespace Nerds.Library
         public Organization FakeOrganization()
         {
             var organization = new Organization();
-            for (var i = 0; i <= random.Next(6, 24); i++)
+            for (var i = 0; i <= 5; i++)
                 organization.AddBook(FakeBook());
 
             organization.AddCustomer(FakeCustomer());
