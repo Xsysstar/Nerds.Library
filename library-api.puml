@@ -1,0 +1,72 @@
+@startuml
+
+class Library {
+}
+Library o- Book : Owns
+
+class Book {
+	#ID
+	+UniqueBarcode
+}
+Book -> BookTemplate
+Book o-- Reservation
+
+class BookTemplate {
+	#ID
+	+ISBN10
+	+ISBN13
+	+PublicationDate
+}
+BookTemplate o--> Rating
+BookTemplate o--> Author
+BookTemplate o--> Publisher
+BookTemplate o--> Genre
+BookTemplate o--> Title
+
+class Rating {
+	+Stars
+	+Origin : Customer
+}
+
+class Author {
+	#ID
+	+Name
+	+DayOfBirth
+	+DayOfDeath
+}
+
+class Publisher {
+	#ID
+	+Name
+}
+
+class Genre {
+	#ID
+	+Caption
+}
+
+class Title {
+	#ID
+	+Caption
+	+Subcaption
+}
+
+class Reservation {
+	{static} +IsBookAvailable(Book,DateTime) : bool
+	{static} +Reserve(Book,Customer) : Reservation
+	{static} +Return(Book,Customer) : Reservation
+	+BeginDateTime
+	+EndDateTime
+	+IsBookAvailable
+}
+
+Reservation --> Customer
+
+class Customer {
+	#ID
+	+Name
+	+EmailAddress
+}
+
+
+@enduml
