@@ -1,4 +1,5 @@
 ﻿using Nerds.Library.Books;
+using Nerds.Library.Business;
 using System;
 using System.Linq;
 
@@ -28,9 +29,12 @@ namespace Nerds.Library
 
         public Organization FakeOrganization()
         {
-            var organization = new Organization(null, null);
+            var organization = new Organization();
             for (var i = 0; i <= random.Next(6, 24); i++)
                 organization.AddBook(FakeBook());
+
+            organization.AddCustomer(FakeCustomer());
+            organization.AddCustomer(FakeCustomer());
 
             return organization;
         }
@@ -87,6 +91,16 @@ namespace Nerds.Library
         public Genre FakeGenre()
         {
             return fakeGenres[random.Next(fakeGenres.Length)];
+        }
+
+        private Customer FakeCustomer()
+        {
+            var id = Guid.NewGuid();
+            return new Customer
+            {
+                Id = id,
+                Name = "Customer " + id,
+            };
         }
     }
 }

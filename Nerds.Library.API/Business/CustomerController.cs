@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Nerds.Library.Business
 {
@@ -9,11 +8,11 @@ namespace Nerds.Library.Business
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class BusinessController : ControllerBase
+    public class CustomerController : ControllerBase
     {
         private readonly Organization organization;
 
-        public BusinessController(Organization organization)
+        public CustomerController(Organization organization)
         {
             this.organization = organization;
         }
@@ -24,15 +23,11 @@ namespace Nerds.Library.Business
         /// <remarks>Satisfies requirement 1; interpreting 'available' as 'not reserved'.</remarks>
         /// <returns>The owned books.</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<BusinessDetailsDTO>> GetAll()
+        public ActionResult<IEnumerable<Customer>> GetAll()
         {
-            return Ok(organization.BookBusinesses.Select(BusinessDetailsDTO.FromBook));
+            // TODO: transform to DTO
+            //return Ok(organization.Customers.Select(CustomerDTO.FromCustomer));
+            return Ok(organization.Customers);
         }
-
-        // TODO:
-        // - Get reservable available books (req 1)
-        // - Get reservations for customer (that are expiring soon) (req 4)
-        // - Reserve book (req 3)
-        // - Return book (req 5, req 9)
     }
 }

@@ -11,6 +11,6 @@ namespace Nerds.Library.Business
         /// </summary>
         public string UniqueBarcode { get; set; }
 
-        public bool IsAvailable { get; set; }
+        public Reservation Reservation { get; set; }
     }
 }

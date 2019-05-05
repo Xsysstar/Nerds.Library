@@ -11,7 +11,7 @@
             return new AvailabilityDetailsDTO
             {
                 UniqueBarcode = availabilty.UniqueBarcode,
-                IsAvailable = availabilty.IsAvailable
+                IsAvailable = availabilty.Reservation == null,
             };
         }
     }

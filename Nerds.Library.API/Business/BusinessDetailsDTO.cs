@@ -34,7 +34,7 @@ namespace Nerds.Library.Business
                 Title = business.BookTemplate.Title?.Caption,
                 Authors = business.BookTemplate.Authors?.Select(a => a.FullName)?.ToArray(),
                 Genres = business.BookTemplate.Genres?.Select(a => a.Caption)?.ToArray(),
-                Availability = business.GetBookAvailability(availabilityCheckMoment).Select(AvailabilityDetailsDTO.FromAvailability)
+                Availability = business.GetBookAvailabilities(availabilityCheckMoment).Select(AvailabilityDetailsDTO.FromAvailability)
             };
         }
     }

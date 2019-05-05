@@ -33,22 +33,20 @@ namespace Nerds.Library.Business
 
         /// <summary>
         /// Tries to get an instance of <see cref="BookTemplate"/> that should be available on
-        /// <paramref name="availableOn"/> (for <paramref name="customer"/>).
+        /// <paramref name="availableOn"/>.
         /// </summary>
         /// <param name="availableOn">The moment the book should be available.</param>
-        /// <param name="customer">The customer, in case he has existing reservations.</param>
         /// <returns>The list of every available <see cref="Book"/>.</returns>
-        public IEnumerable<Availability> GetBookAvailability(DateTimeOffset availableOn, Customer customer = null)
+        public IEnumerable<Availability> GetBookAvailabilities(DateTimeOffset availableOn)
         {
-            var conflictingReservations = Reservations.Where(r => r.BeginTerm < availableOn && availableOn < r.EndTerm && r.Customer != customer && !r.IsBookReturned);
-            var unavailableBookIds = conflictingReservations.Select(r => r.BookId);
-
+            var applicableReservations = Reservations.Where(r => r.BeginTerm <= availableOn && availableOn <= r.EndTerm && !r.IsBookReturned);
             var availabilities = Books.Select(b => new Availability
             {
                 BookId = b.Id,
                 UniqueBarcode = b.UniqueBarcode,
-                IsAvailable = !unavailableBookIds.Contains(b.Id)
+                Reservation = applicableReservations.FirstOrDefault(r => r.BookId == b.Id)
             });
+
             return availabilities;
         }
 
@@ -58,9 +56,56 @@ namespace Nerds.Library.Business
         /// <param name="book">The book.</param>
         /// <param name="customer">The customer.</param>
         /// <returns>A <see cref="Reservation"/> if successful.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if book is not available for this customer.
+        /// </exception>
         public Reservation ReserveBook(Book book, Customer customer)
         {
-            throw new NotImplementedException();
+            Debug.Assert(book != null, "book != null");
+            Debug.Assert(customer != null, "customer != null");
+
+            var reservationMoment = DateTimeOffset.Now;
+
+            var availabilities = GetBookAvailabilities(reservationMoment);
+            var conflictingReservation = availabilities.FirstOrDefault(a => a.BookId == book.Id && a.Reservation != null)?.Reservation;
+            if (conflictingReservation != null && conflictingReservation.Customer != customer)
+            {
+                throw new InvalidOperationException("This book is not available for this customer");
+            }
+
+            var reservation = new Reservation
+            {
+                BeginTerm = reservationMoment,
+                EndTerm = reservationMoment.AddDays(14),
+                BookId = book.Id,
+                Customer = customer,
+                IsBookTaken = false,
+                IsBookReturned = false,
+            };
+            reservations.Add(reservation);
+
+            Debug.Assert(GetBookAvailabilities(reservationMoment).Any(a => a.BookId == book.Id && a.Reservation == reservation),
+                "GetBookAvailability(reservationMoment).Any(a => a.BookId == book.Id && a.Reservation == reservation)");
+
+            return reservation;
+        }
+
+        public void TakeBook(Book book, Customer customer)
+        {
+            var takingMoment = DateTimeOffset.Now;
+            var availability = GetBookAvailabilities(takingMoment).FirstOrDefault(a => a.BookId == book.Id);
+
+            var reservation = availability.Reservation;
+            if (reservation == null)
+            {
+                reservation = ReserveBook(book, customer);
+            }
+            else if (reservation.Customer != customer)
+            {
+                throw new InvalidOperationException("This book was already reserved for another customer and cannot be taken");
+            }
+
+            reservation.IsBookTaken = true;
         }
 
         /// <summary>
@@ -70,10 +115,29 @@ namespace Nerds.Library.Business
         /// <param name="customer">
         /// The customer that was expected to hold it. To omit this check, leave <c>null</c>.
         /// </param>
-        /// <returns></returns>
-        public Reservation ReturnBook(Book book, Customer customer = null)
+        public void ReturnBook(Book book, Customer customer = null)
         {
-            throw new NotImplementedException();
+            var returningMoment = DateTimeOffset.Now;
+            var availability = GetBookAvailabilities(returningMoment).FirstOrDefault(a => a.BookId == book.Id);
+
+            var reservation = availability.Reservation;
+            if (reservation == null)
+            {
+                throw new InvalidOperationException("This book was not reserved in the first place");
+            }
+
+            if (customer != null && reservation.Customer != customer)
+            {
+                throw new InvalidOperationException("This book was reserved by another customer");
+            }
+
+            reservation.IsBookReturned = true;
+
+            Debug.Assert(GetBookAvailabilities(returningMoment).Any(a => a.BookId == book.Id && a.Reservation == null),
+                "GetBookAvailability(reservationMoment).Any(a => a.BookId == book.Id && a.Reservation == null)");
         }
+
+        // TODO:
+        // - add CancelReservation
     }
 }
