@@ -22,7 +22,7 @@ namespace Nerds.Library
             random = new Random(seed);
 
             fakePublishers = new string[] { "Nerds & co", "Springer", "Scholastic", "Wiley", "Oxford University Press", "Pearson Education" }.Select(name => new Publisher { Id = Guid.NewGuid(), Name = name }).ToArray();
-            fakeTitles = new string[] { "Harry Potter", "Lord of the Rings", "The Pragmatic Programmer", "Clean Code", "The Art of War" }.Select(caption => new Title { Caption = caption, Subcaption = caption.Length % 2 == 0 ? null : "A story" }).ToArray();
+            fakeTitles = new string[] { "Harry Potter", "Lord of the Rings", "The Pragmatic Programmer", "Clean Code", "The Art of War" }.Select(caption => new Title { Caption = caption }).ToArray();
             fakeAuthors = new string[] { "J.K. Rowling", "Tolkien", "Kevlin Henney", "Hans Kazan", "Anonymous" }.Select(name => new Author { Id = Guid.NewGuid(), FullName = name }).ToArray();
             fakeGenres = new string[] { "Action", "Romance", "Drama", "Documentary", "Fake news" }.Select(caption => new Genre { Id = Guid.NewGuid(), Caption = caption }).ToArray();
         }
